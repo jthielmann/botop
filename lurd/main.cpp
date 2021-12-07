@@ -11,7 +11,7 @@ int main(int argc, char * argv[]){
 
   C.addFile(rai::raiPath("../rai-robotModels/scenarios/pandasTable-calibrated.g"));
 
-  BotOp bot(C, !rai::checkParameter<bool>("sim"));
+  BotOp bot(C, rai::checkParameter<bool>("real"));
 
   if(rai::checkParameter<bool>("lurd")){
     arr q=bot.qHome;
@@ -33,7 +33,17 @@ int main(int argc, char * argv[]){
     while(bot.step(C));
   }
 
+  if (rai::checkParameter<bool>("test")){
+
+      bot.gripperL->close();
+      while(!bot.gripperL->isDone()) rai::wait(.1);
+
+      bot.gripperL->open();
+      while(!bot.gripperL->isDone()) rai::wait(.1);
+  }
+
   cout <<"bye bye" <<endl;
+  rai::wait(.1);
 
   return 0;
 }

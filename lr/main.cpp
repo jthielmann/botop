@@ -11,7 +11,7 @@ int main(int argc, char * argv[]){
 
   C.addFile(rai::raiPath("../rai-robotModels/scenarios/pandasTable-calibrated.g"));
 
-  BotOp bot(C, !rai::checkParameter<bool>("sim"));
+  BotOp bot(C, rai::checkParameter<bool>("real"));
 
   if(rai::checkParameter<bool>("rl")){
     arr q=bot.qHome;
