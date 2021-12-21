@@ -353,3 +353,11 @@ beschreibungstools
 
 
 
+TODO:
+sim durch botop ersetzen, gucken welche compile feheler es gibt, das aufschreiben, den pfad von sim zu botop aendern
+kapitel anfangen
+latex
+allen code committen, damit alles auf dem rechner in der uni laeuft
+
+
+
