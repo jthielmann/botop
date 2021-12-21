@@ -1,37 +1,7 @@
 #include <BotOp/bot.h>
 #include <BotOp/motionHelpers.h>
 
-//===========================================================================
-
-
-void balanceBlockOnArm() {
-  rai::Configuration config;
-  std::vector<std::string> scenarioPaths;
-  scenarioPaths.emplace_back("./s5.g");
-  std::shared_ptr<rai::Simulation> sim = InitSimulation(config, scenarioPaths);
-  std::shared_ptr<KOMO> komo;
-  
-
-
-
-  komo = GetKomoToBlock(config);
-  ExecuteKomoInSimulation(komo, sim, 2);
-  // finger sollten das objekt erkennen und dann von alleine genau soweit schließen, bis kontakt entsteht
-  sim.get()->closeGripper("R_gripper", 0.1, 1);
-  //while(sim.get()->getGripperIsGrasping("R_gripper"));
-  SimWaitForSeconds(.5, sim);
-
-  komo = MoveArmAboveTheOther(config);
-  ExecuteKomoInSimulation(komo, sim, 2.);
-
-  sim.get()->openGripper("R_gripper", 0.1, 1);
-  SimWaitForSeconds(2., sim);
-
-  rai::wait();
-
-}
-
-
+//===========================================================================s
 
 int main(int argc, char * argv[]){
   rai::initCmdLine(argc, argv);

@@ -324,10 +324,20 @@ kann man hier essen/trinken
 
 
 Kapitel
-1)   Einleitung
-2-4) Beschreibung der einzelnen Bewegungsbeschreibungsarten, vor-/nachteile, skalierbarkeit
+1) Einleitung
+2) wie kann man bewegungen beschreiben - imperativ eindeutig zb alle gelenkwinkel deklarativ - problem deklarieren mit constraints daraus werden die gelenkwinkel geschlossen
+3) warum mehr freiheitsgrade besser -- compositionality damit die constraints zusammensetzbar sind -- wiedersprechen sich die constraints von greifen und bewegen oder so
+4) generalisiert die beschreibung fuer wie viele scenarien bleiben die constraints korrekt - drehung des objekts --> 3d coord muessen neu gemacht werden
+5) tisch beruehren(kontakt herstellen, auch mit gegriffenem koerper),  box, ball zylinder , koerper greifen, ball werfen
+6) demos?
+
+2) 
+compliant control funneling weglassen
+Beschreibung der einzelnen Bewegungsbeschreibungsarten, vor-/nachteile, skalierbarkeit
+glenke nur ueber winkel beschreibbar
+beschreibungstools
 - start/ endposition + skalarprodukt während der bewegung / 
-- nur start / zielposition, rest über abstandsconstraints
+- nur start / zielposition ---- welche? gelenk oder 3d koord., rest über abstandsconstraints
 - nur start / zielposition, rest über geschwindigkeits / beschleunigungsconstraints
 - verschiedene varianten, um die start/zielposition zu definieren? skalarprodukte / positionen / abstände / geschwindigkeiten
 -> meistens das selbe: stillstand, fest definiertes ziel, aufgabenabhängig
@@ -337,7 +347,8 @@ Kapitel
 - eine lange Bewegung vs verkettete kurze
 - anzahl der constraints reduzieren - warum sinnvoll
 - funnelling nutzen, um durch die reduktion der komplexität effizientere bewegungen definieren zu können?
-
+3) Scenarios - gut mit einer beschreibungsmethode, schlecht mit einer anderen
+4) conclusion
 
 
 
