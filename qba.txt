@@ -352,6 +352,10 @@ beschreibungstools
 
 
 
+VON SIM ZU REAL:
+die bewegung designen, gucken wo der arm hingreift, dort dann den block hinlegen
+
+
 
 TODO:
 sim durch botop ersetzen, gucken welche compile feheler es gibt, das aufschreiben, den pfad von sim zu botop aendern
