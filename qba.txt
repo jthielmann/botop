@@ -1,0 +1,367 @@
+ba fragen
+warum ist das world koordinatensystem nicht auf den tisch ausgerichtet -> ist gerade
+komo.addObjective({someTimes}, FS_transAccelerations, {"R_gripper"}, OT_eq, {1e2}, {0., 0., 0.1});
+crashes with FS_transAcc is obsolete
+
+
+
+Daten: 
+
+	mit qitself:
+sos:0.200502,
+ineq:0.0024728,
+eq:0.00112784,
+
+	ohne
+sos:0.0937039,
+ineq:1.42138e-05,
+eq:0,
+
+komo.addObjective({1.}, FS_qItself, {}, OT_eq, {1e2}, {}, 1);
+komo.addObjective({1.}, FS_qItself, {}, OT_eq, {1e2}, {}, 0);
+komo.addObjective({1.}, FS_qItself, {}, OT_eq, {1e2}, {}, 2);
+
+qhome auslesen
+
+
+
+tischkante
+kugel zum drehen oder andere hand oder arm selber oder weniger kraft mehr durch greifen
+mehrere blöcke
+ein block auf den anderen und dann hochhüpfen
+im kreis bewegen schnell (eher nicht)
+schnell coden soll das ziel sein egal was die bewegung am ende ist
+auf anderen hand block ablegen 
+mit armen kreativ arbeitena
+gemeinsamkeitne der bewegungsabläufen
+dinge in kontakt bringen durch gravitation, statisch, dynamisch, geschwindigkeiten
+bewegungssequentierung
+
+kinedit tmp.g
+mit tmp.g zusammen editieren
+block { shape:ssBox, size:[....] , color...}
+Include 'pandaTable.g'
+# für kommentare
+
+klicken ctrl left
+space -> im terminal was gehovert wurde
+
+box(table) {
+		  Q:[0 0 .17] (in cm)
+		  joint:rigid
+          shape:ssBox, size:[....] , color...}
+--> fest ohne joint
+
+
+man kann sachen an den tisch schrauben
+
+ballstick(ball(
+{
+	Q:[0 0 -.1]
+	shape:capsule, 
+}
+
+
+ZOOM installieren
+
+
+
+
+
+
+
+qhome removed because why not? is it needed?
+
+
+
+
+
+
+
+
+
+
+
+  komo.addObjective({1.}, FS_qItself, {}, OT_eq, {1e2}, {}, 1);
+  komo.addObjective({2.}, FS_qItself, {}, OT_eq, {1e2}, {}, 1);
+
+!=
+
+  komo.addObjective({1., 2.}, FS_qItself, {}, OT_eq, {1e2}, {}, 1);
+
+times -> intervall?
+
+berühren:
+komo.addObjective({1.0}, FS_distance, {"R_gripper", "object"}, OT_eq, {1e2}, {});
+nicht berühren:
+komo.addObjective({1.0}, FS_distance, {"R_gripper", "object"}, OT_ineq, {1e2}, {});
+
+
+grasp in simulation aber nicht in komo optimize?
+
+
+
+
+
+
+simulation : in echtzeit, 
+komo view ist nur ein 'film'
+
+
+
+
+
+
+setmoveto(komo.getpath_qorg(), 2.);, in echter ziet (2s)
+S.setMoveTo(qHome, 1.); zweiter spline, danach fährt der robo nach hause
+
+S.step
+
+
+
+
+
+ide demo
+code browsing
+breakpoints
+variable display
+
+
+
+
+
+
+next:
+-komplexere abläufe (block auf block, die bewegung muss stimmen, die finger aber nur ausrichten, arm zu arm), bewegungen chainen
+-is gripper closed angucken, finger
+-sos und eq < 1
+
+
+
+
+
+next : ide demo, greifen realistisch(insidebox + mehrere skalarprodukte), langer stab greifen an kugel
+a
+
+1) pfad zum griff
+2) in simu ausführen -> close gripper mit simu
+3) pfad für hochheben in simu
+4) pfad für an kugel stoßen
+5) gripper aufmachen
+
+
+- IDE demo - code browing, debugging with breakpoints & stepping, variable display
+- pfade aufteilen
+fahre zum griff -> in simu ausfüyhren -> closeGripper mit Simu -> pfad für hochheben -> in simu ausführen -> paf für an Kugel stossen -> in Simu ausführen -> gripper aufmachen -> is Simu ausführen
+
+
+
+S.setMoveTo(komo.getPath_qOrg(), 2.); //append a 2 seconds spline -- this call is non-blocking!
+
+Ausführen
+
+
+S.setMoveTo(qHome, 1.); //1 second back home -- the spline is appended, the call is non-blocking
+
+Ausführen
+
+
+
+
+
+
+----------------------------------------
+
+
+inside box wusste nicht, was die 6 parameter genau machen sollen, sonst wäre das einfach mit times {0., 1.}
+wie macht man das schritt für schritt mit komo?
+
+
+
+
+
+rai/python script
+p
+
+// irgendwo außerhalb der box
+  komo.addObjective({1.}, FS_insideBox,       {"R_gripper", blockName.c_str()},       OT_ineq, {1e2}, {});
+
+
+run = run + build
+
+{{1,3},{1e2,0,0}}
+1 * 3 matrix, x,y,z
+
+block kleiner
+
+
+obj->setAttribute == change like in .g file
+friction = reibung
+restitution = bounciness
+
+ref (l_panda_joint6) {shape:marker size:[.2] Q:<t(.07 0 0) d (90 0 1 0)>}
+
+todo : block balance
+
+
+X achse : rot
+y achse : grün
+z achse : blau
+
+
+todo: 
+die bewegungnen simpler formulieren, mit den kollisionen
+auch den zweiten arm immer dabei haben
+flying block stapeln 
+
+
+
+
+
+
+
+
+
+
+todo:
+clone -> fork
+altes franka in botop
+librealsense weglassen
+python mitmachen
+statt cmake .. "ccmake"
+
+
+was kann meine bachelorarbeit beitragen
+teil1: komplexe manipulationen effizient programmieren, gleicher code für sim real
+teil2: deklarative bewegungsbeschreibung, imperativ vs deklarativ, ist das ein gutes framework
+
+auch: anhand von funneling
+richtung softwareengeneering: patterns
+auch: abstand, positionen
+dokumentation
+wie man gut die bewegungen entwickelt zb tausend constraints vs beschleunigung nach oben
+wie mit diesem framework besonders effizient sein soll
+umwelt nutzen um block zu drehen ohne die umwelt zu sehen
+sequentierung? fehlerbehandlung?
+tolle demos
+benchmarks? -> nicht bessere precision, sondern schnell effizient roboterverhalten erzeugen
+robotics rss system paper
+RSS systems paper
+
+verstehen was sind die probleme, warum komme ich nicht weiter
+konzept der bewegungsbeschreibung -> deklarative bewegungsbeschreibung (imperativ)
+
+
+webseite
+-> für python besser, da wie kaggle notebook
+-> für c++ mit anleitungen und aufgaben zum lokalen entwickeln oder mit vm
+(in flow) peer review
+pair programming
+crowd review, also tips von usern und bewertung der tips
+beschreibung der bewegung -> vermittlung verschiedener ansätze für studenten ohne kinematikvorerfahrungen
+-> vergleich von positions- geschwindigskeits- beschleunigungsconstraints
+abstand zwischen objekten
+von simulation auf real
+nodemon damit man einfach neue sektionen hinzufügen kann
+vorallem einfache bewegungsbeschreibung der armbewegung
+
+fragen:
+nur c++ oder auch python
+welche topics also was sollen die studenten am ende können
+zeitumfang um sektionen durchzuarbeiten
+muss man studenten das in einem kurs testen lassen? könnte schwierig sein außerhalb von einem kurs tester zu finden
+soll das tool die studenten bewerten?
+
+topic:
+vereinfachtes programmierenlernen im roboticsbereich 
+benchmarks? -> nicht bessere precision, sondern schnell effizient roboterverhalten erzeugen
+-> den umgang mit addObjective
+lernen
+FS erklären
+robotics kinematik 
+safety?
+
+
+
+
+botop zum laufen kriegen
+eher weniger prio gegenüberstellung gleiches scenario durch verschiedene sachen, einmal oder mehrmals? oder einfach nur ein einzlenes kapitel
+die aufgaben durchgucken und sagen was zu machen ist
+ssh key hinterlegen github einloggen
+titel überlegen
+
+how to describe robotic movements efficiently - a case study using KOMO for robotic manipulation
+
+//how to describe robotic manipulations efficiently - a case study using KOMO for panda arms
+
+oliver? als zweitgutachter
+aufgabenbeschreibung
+-> template email nutzen
+
+sketch für aufgaben machen
+
+
+1) anmeldung
+2) botop
+marchstr 4. stock 
+3) curriculum von übungsaufgaben, die einem die essentiellen dinge beibringen
+4) sketch für aufgaben
+5) aufgaben überarbeiten
+
+
+
+
+kann man eine class haben für real, emu, sim?
+
+
+muss man python können, um richtig in robotics arbeiten zu können?
+
+
+emulation grip?
+
+
+kann man hier essen/trinken
+
+
+Kapitel
+1) Einleitung
+2) wie kann man bewegungen beschreiben - imperativ eindeutig zb alle gelenkwinkel deklarativ - problem deklarieren mit constraints daraus werden die gelenkwinkel geschlossen
+3) warum mehr freiheitsgrade besser -- compositionality damit die constraints zusammensetzbar sind -- wiedersprechen sich die constraints von greifen und bewegen oder so
+4) generalisiert die beschreibung fuer wie viele scenarien bleiben die constraints korrekt - drehung des objekts --> 3d coord muessen neu gemacht werden
+5) tisch beruehren(kontakt herstellen, auch mit gegriffenem koerper),  box, ball zylinder , koerper greifen, ball werfen
+6) demos?
+
+2) 
+compliant control funneling weglassen
+Beschreibung der einzelnen Bewegungsbeschreibungsarten, vor-/nachteile, skalierbarkeit
+glenke nur ueber winkel beschreibbar
+beschreibungstools
+- start/ endposition + skalarprodukt während der bewegung / 
+- nur start / zielposition ---- welche? gelenk oder 3d koord., rest über abstandsconstraints
+- nur start / zielposition, rest über geschwindigkeits / beschleunigungsconstraints
+- verschiedene varianten, um die start/zielposition zu definieren? skalarprodukte / positionen / abstände / geschwindigkeiten
+-> meistens das selbe: stillstand, fest definiertes ziel, aufgabenabhängig
+- positionsconstraints während der bewegung (beschreibung der position zb. über funktion) / geschw. funktion / beschl. funktion
+- Position relativ vs Position absolut
+- Abstandsconstraints FS_distance
+- eine lange Bewegung vs verkettete kurze
+- anzahl der constraints reduzieren - warum sinnvoll
+- funnelling nutzen, um durch die reduktion der komplexität effizientere bewegungen definieren zu können?
+3) Scenarios - gut mit einer beschreibungsmethode, schlecht mit einer anderen
+4) conclusion
+
+
+
+VON SIM ZU REAL:
+die bewegung designen, gucken wo der arm hingreift, dort dann den block hinlegen
+
+
+
+TODO:
+sim durch botop ersetzen, gucken welche compile feheler es gibt, das aufschreiben, den pfad von sim zu botop aendern
+kapitel anfangen
+latex
+allen code committen, damit alles auf dem rechner in der uni laeuft
+
+
+
