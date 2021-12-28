@@ -4,3 +4,6 @@
 [submodule "rai-robotModels"]
 	path = rai-robotModels
 	url = git@github.com:MarcToussaint/rai-robotModels.git
+[submodule "robotics_course"]
+	path = robotics_course
+	url = https://github.com/MarcToussaint/robotics-course.git
