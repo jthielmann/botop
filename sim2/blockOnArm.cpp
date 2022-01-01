@@ -10,53 +10,51 @@
 #include <functional>
 
 //===========================================================================
+std::shared_ptr<KOMO> MoveArmAboveTheOther(rai::Configuration& config){
+  std::shared_ptr<KOMO> komo = PrepareKomo(config, 40u, 1., 1.);
 
-void twoBlocks(){
-  //we don't need to instantiate the real world/simluation here
+  komo.get()->addObjective({1.}, FS_positionRel, {"R_gripperCenter", "ref"}, OT_eq, {1e2}, {0., 0., 0.025});
+  komo.get()->addObjective({1.},  FS_scalarProductZZ, {"obj1", "ref"}, OT_eq,   {1e2}, {1.});
+  komo.get()->addObjective({1.},  FS_scalarProductZZ, {"ref", "world"}, OT_eq,   {1e2}, {1.});
 
-  //-- MODEL WORLD configuration, this is the data structure on which you represent
-  rai::Configuration C;
-  C.addFile("s3.g");
+  arr basePos = config["L_panda_coll6"]->getPosition();
+  komo.get()->addObjective({0., 1.}, FS_position, {"L_panda_coll6"}, OT_eq, {1e2}, basePos);
 
-  //-- optimize a single configuration using KOMO
 
-  KOMO komo;                     //create a solver
-  komo.setModel(C, true);        //tell it use C as the basic configuration (internally, it will create copies of C on which the actual optimization runs)
-  komo.setTiming(4., 40, 5., 2);  //we want to optimize a single step (1 phase, 1 step/phase, duration=1, k_order=1)
-
-  //now add objectives!
-
-  //the default control objective:
-  komo.add_qControlObjective({}, 2, 1.); //sos-penalize (with weight=1.) the finite difference joint velocity (k_order=1) between x[-1] (current configuration) and x[0] (to be optimized)
-
-  //task objectives:
-  komo.addObjective({1.}, FS_positionDiff, {"R_gripperCenter", "obj1"}, OT_sos, {1e2});
-  komo.addObjective({1.}, FS_scalarProductXZ, {"R_gripperCenter", "obj1"}, OT_eq, {1e2}, {0.});
-
-  komo.addObjective({1.}, FS_qItself, {}, OT_eq, {1e2}, {}, 1);
-  komo.addObjective({2.}, FS_qItself, {}, OT_eq, {1e2}, {}, 1);
-
-  arr basePos = C["obj1"]->getPosition();
-  if (basePos.N != 3) return;
-  basePos(2) += 0.3;
-  komo.addObjective({2.}, FS_position, {"R_gripperCenter"}, OT_eq, {1e2}, basePos);
-
-  //run the solver
-  komo.optimize();
+  komo.get()->addObjective({0., .9},  FS_distance,     {"R_gripper", "L_panda_coll6"}, OT_ineq,   {1e2}, {-.01});
+  komo.get()->addObjective({0., .9},  FS_distance,     {"R_finger1", "L_panda_coll6"}, OT_ineq,   {1e2}, {-.01});
+  komo.get()->addObjective({0., .9},  FS_distance,     {"R_finger2", "L_panda_coll6"}, OT_ineq,   {1e2}, {-.01});
   
-  komo.view(true, "optimized configuration"); //display it
-  while(komo.view_play(true));
+  komo.get()->addObjective({0., .9},  FS_distance,     {"R_gripper", "L_panda_coll7"}, OT_ineq,   {1e2}, {-.01});
+  komo.get()->addObjective({0., .9},  FS_distance,     {"R_finger1", "L_panda_coll7"}, OT_ineq,   {1e2}, {-.01});
+  komo.get()->addObjective({0., .9},  FS_distance,     {"R_finger2", "L_panda_coll7"}, OT_ineq,   {1e2}, {-.01});
 
-  rai::wait();
+  komo.get()->addObjective({0., .9},  FS_distance,     {"R_gripper", "L_gripper"}, OT_ineq,   {1e2}, {-.01});
+  komo.get()->addObjective({0., .9},  FS_distance,     {"R_finger1", "L_gripper"}, OT_ineq,   {1e2}, {-.01});
+  komo.get()->addObjective({0., .9},  FS_distance,     {"R_finger2", "L_gripper"}, OT_ineq,   {1e2}, {-.01});
 
-}
+  komo.get()->addObjective({0., .9},  FS_distance,     {"R_gripper", "L_finger1"}, OT_ineq,   {1e2}, {-.01});
+  komo.get()->addObjective({0., .9},  FS_distance,     {"R_finger1", "L_finger1"}, OT_ineq,   {1e2}, {-.01});
+  komo.get()->addObjective({0., .9},  FS_distance,     {"R_finger2", "L_finger1"}, OT_ineq,   {1e2}, {-.01});
 
-std::shared_ptr<rai::Simulation> InitSimulation(rai::Configuration& RealWorld, std::vector<std::string> scenarioPaths) {
-  for (std::string path : scenarioPaths) {
-    RealWorld.addFile(path.c_str());
-  }
+  komo.get()->addObjective({0., .9},  FS_distance,     {"R_gripper", "L_finger2"}, OT_ineq,   {1e2}, {-.01});
+  komo.get()->addObjective({0., .9},  FS_distance,     {"R_finger1", "L_finger2"}, OT_ineq,   {1e2}, {-.01});
+  komo.get()->addObjective({0., .9},  FS_distance,     {"R_finger2", "L_finger2"}, OT_ineq,   {1e2}, {-.01});
 
-  return std::make_shared<rai::Simulation>(RealWorld, rai::Simulation::SimulatorEngine::_bullet, 2);
+  komo.get()->addObjective({0., .9},  FS_distance,     {"obj1", "L_finger1"}, OT_ineq,   {1e2}, {-.01});
+  komo.get()->addObjective({0., .9},  FS_distance,     {"obj1", "L_finger1"}, OT_ineq,   {1e2}, {-.01});
+  komo.get()->addObjective({0., .9},  FS_distance,     {"obj1", "L_finger1"}, OT_ineq,   {1e2}, {-.01});
+
+  komo.get()->addObjective({0., .9},  FS_distance,     {"obj1", "L_finger2"}, OT_ineq,   {1e2}, {-.01});
+  komo.get()->addObjective({0., .9},  FS_distance,     {"obj1", "L_finger2"}, OT_ineq,   {1e2}, {-.01});
+  komo.get()->addObjective({0., .9},  FS_distance,     {"obj1", "L_finger2"}, OT_ineq,   {1e2}, {-.01});
+
+  //komo.get()->addObjective({0., 1.},  FS_vectorZ, {"ref"}, OT_eq,   {1e2}, {0., 0., 0.}, 1);
+
+  komo.get()->addObjective({0.9, 1.}, FS_positionRel,     {"R_gripperCenter", "ref"}, OT_eq,   {1e2}, {0.,0.,0.2}, 2);
+  komo.get()->addObjective({1.},      FS_qItself,         {},                           OT_eq,   {1e2}, {},     1);
+  komo.get()->optimize();
+  return komo;
 }
 
 std::shared_ptr<BotOp> InitBotop(rai::Configuration& RealWorld, std::vector<std::string> scenarioPaths) {
@@ -80,19 +78,6 @@ std::shared_ptr<KOMO> PrepareKomo(const rai::Configuration& c, uint stepsPerPhas
     return komo;
 }
 
-void ExecuteKomoInSimulation(std::shared_ptr<KOMO> komo, std::shared_ptr<rai::Simulation> sim, double duration = 4) {
-    arr next = komo.get()->getPath_qOrg();
-    sim.get()->setMoveTo(next, duration); //append a 2 seconds spline -- this call is non-blocking!
-
-    do
-    {
-        double tau=.001; //can set anything here...
-        sim.get()->step({}, tau); //this executes the send spline while iterating physics with fine time resolution
-        rai::wait(tau);
-    }
-    while (sim.get()->getTimeToMove() >= 0);
-}
-
 void ExecuteKomoInBotop(std::shared_ptr<KOMO> komo, std::shared_ptr<BotOp> bot, double duration = 4) {
     arr path = komo.get()->getPath_qOrg();
     bot.get()->setMoveTo(next, duration); //append a 2 seconds spline -- this call is non-blocking!
@@ -110,11 +95,10 @@ void ExecuteKomoInBotop(std::shared_ptr<KOMO> komo, std::shared_ptr<BotOp> bot, 
     return;
 }
 
-std::shared_ptr<KOMO> GetKomoToBlockTwo(const rai::Configuration& config) {
+std::shared_ptr<KOMO> GetKomoToBlock(const rai::Configuration& config) {
     std::shared_ptr<KOMO> komo = PrepareKomo(config);
     std::string blockName = "obj1";
-    std::string blockName2 = "obj2";
-
+    
     //task objectives:
     komo.get()->addObjective({1.},     FS_insideBox,       {"R_gripperCenter", blockName.c_str()},  OT_ineq, {1e2}, {});
     komo.get()->addObjective({1.},     FS_scalarProductXX, {"R_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.});
@@ -122,54 +106,37 @@ std::shared_ptr<KOMO> GetKomoToBlockTwo(const rai::Configuration& config) {
     komo.get()->addObjective({1.},     FS_scalarProductXZ, {"R_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.});
     komo.get()->addObjective({0., 1.}, FS_distance,        {"R_finger1",       blockName.c_str()},  OT_ineq, {1e2}, {-.01});
     komo.get()->addObjective({0., 1.}, FS_distance,        {"R_finger2",       blockName.c_str()},  OT_ineq, {1e2}, {-.01});
-    komo.get()->addObjective({0., 1.}, FS_distance,        {"R_finger1",       blockName2.c_str()}, OT_ineq, {1e2}, {-.01});
-    komo.get()->addObjective({0., 1.}, FS_distance,        {"R_finger2",       blockName2.c_str()}, OT_ineq, {1e2}, {-.01});
-    komo.get()->addObjective({1.},     FS_qItself,         {},                           OT_eq,   {1e2}, {},     1);
-    komo.get()->addObjective({1.},     FS_positionRel,     {"R_gripperCenter", blockName.c_str()},  OT_sos, {{1,3},{0,1e2,0}});
+    komo.get()->addObjective({1.},     FS_qItself,         {},                                      OT_eq,   {1e2}, {},     1);
+    komo.get()->addObjective({1.},     FS_positionRel,     {"R_gripperCenter", blockName.c_str()},  OT_sos,  {{1,3},{0,1e2,0}});
 
     komo.get()->optimize();
     return komo;
 }
 
-std::shared_ptr<KOMO> GetKomoUp(const rai::Configuration& config, double height = 0.3) {
-    std::shared_ptr<KOMO> komo = PrepareKomo(config);
-    const std::string blockName = "obj1";
-
-    //task objectives:
-    arr basePos = config[blockName.c_str()]->getPosition();
-    basePos(2) += height;
-    komo.get()->addObjective({1.}, FS_position, {"R_gripperCenter"}, OT_eq, {1e2}, basePos);
-    komo.get()->addObjective({0., 1.}, FS_scalarProductXX, {"R_gripperCenter", "world"}, OT_eq,   {1e2}, {0.}, 1);
-    komo.get()->addObjective({0., 1.}, FS_scalarProductYY, {"R_gripperCenter", "world"}, OT_eq,   {1e2}, {0.}, 1);
-    komo.get()->addObjective({0., 1.}, FS_scalarProductZZ, {"R_gripperCenter", "world"}, OT_eq,   {1e2}, {0.}, 1);
-
-    komo.get()->optimize();
-    return komo;
-}
-
-void flyingBlockSim() {
+void BalanceBlockOnArmSim() {
   rai::Configuration config;
   std::vector<std::string> scenarioPaths;
-  scenarioPaths.emplace_back("./s4.g");
+  scenarioPaths.emplace_back("./s5.g");
   std::shared_ptr<rai::Simulation> sim = InitSimulation(config, scenarioPaths);
   std::shared_ptr<KOMO> komo;
-
-  komo = GetKomoToBlockTwo(config);
-  ExecuteKomoInSimulation(komo, sim, 2.);
   
+  komo = GetKomoToBlock(config);
+  ExecuteKomoInSimulation(komo, sim, 2);
   // finger sollten das objekt erkennen und dann von alleine genau soweit schließen, bis kontakt entsteht
   sim.get()->closeGripper("R_gripper", 0.1, 1);
-  while(sim.get()->getGripperIsGrasping("R_gripper"));
-  SimWaitForSeconds(1., sim);
-  // simu laufen lassen mit do step aus execute zb für 1 s
-  komo = GetKomoUp(config);
-  ExecuteKomoInSimulation(komo, sim, 0.5);
+  //while(sim.get()->getGripperIsGrasping("R_gripper"));
+  SimWaitForSeconds(.5, sim);
 
-  SimWaitForSeconds(1., sim);
+  komo = MoveArmAboveTheOther(config);
+  ExecuteKomoInSimulation(komo, sim, 2.);
 
+  sim.get()->openGripper("R_gripper", 0.1, 1);
+  SimWaitForSeconds(2., sim);
+
+  rai::wait();
 }
 
-void flyingBlockBotop()
+void BalanceBlockOnArmBotop()
 {
     rai::Configuration config;
     std::vector<std::string> scenarioPaths;
@@ -177,14 +144,13 @@ void flyingBlockBotop()
     std::shared_ptr<BotOp> bot = InitBotop(config, scenarioPaths);
     bot.get->home(C);
     
-    std::shared_ptr<KOMO> komo = GetKomoToBlockTwo(config);
+    std::shared_ptr<KOMO> komo = GetKomoToBlock(config);
     ExecuteKomoInBotop(komo, sim, 2.);
-    bot.get->closeGripper();
     
     bot.get->gripperL->close();
     while(!bot.gripperL->isDone()) rai::wait(.1);
     
-    komo = GetKomoUp(config);
+    komo = MoveArmAboveTheOtherBotop(config);
     ExecuteKomoInBotop(komo, sim, 0.5);
     
     bot.gripperL->open();
@@ -192,6 +158,6 @@ void flyingBlockBotop()
 
 int main(int argc,char **argv){
     rai::initCmdLine(argc, argv);
-    flyingBlockBotop();
+    BalanceBlockOnArmBotop();
     return 0;
 }
