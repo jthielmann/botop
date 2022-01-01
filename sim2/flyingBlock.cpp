@@ -169,7 +169,7 @@ void flyingBlockSim() {
 
 }
 
-void flyingBlockBotop()
+void FlyingBlockBotop()
 {
     rai::Configuration config;
     std::vector<std::string> scenarioPaths;
@@ -192,6 +192,6 @@ void flyingBlockBotop()
 
 int main(int argc,char **argv){
     rai::initCmdLine(argc, argv);
-    flyingBlockBotop();
+    FlyingBlockBotop();
     return 0;
 }
