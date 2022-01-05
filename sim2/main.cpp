@@ -1,4 +1,3 @@
-#include <Perception/opencv.h> //always include this first! OpenCV headers define stupid macros
 #include <Geo/depth2PointCloud.h>
 
 #include <Kin/kin.h>
@@ -9,6 +8,8 @@
 #include <KOMO/komo.h>
 #include <functional>
 
+#include <BotOp/bot.h>
+#include <BotOp/motionHelpers.h>
 //===========================================================================
 
 void twoBlocks(){
@@ -93,16 +94,16 @@ void ExecuteKomoInSimulation(std::shared_ptr<KOMO> komo, std::shared_ptr<rai::Si
     while (sim.get()->getTimeToMove() >= 0);
 }
 
-void ExecuteKomoInBotop(std::shared_ptr<KOMO> komo, std::shared_ptr<BotOp> bot, double duration = 4) {
+void ExecuteKomoInBotop(std::shared_ptr<KOMO> komo, rai::Configuration& c, std::shared_ptr<BotOp> bot, double duration = 4) {
     arr path = komo.get()->getPath_qOrg();
-    bot.get()->setMoveTo(next, duration); //append a 2 seconds spline -- this call is non-blocking!
+    bot.get()->moveLeap(path, duration); //append a 2 seconds spline -- this call is non-blocking!
 
     for(double speed=1.;speed<=5.;speed+=.5)
     {
-        bot.move(path, ARR(10.)/speed);
+        bot.get()->move(path, ARR(10.)/speed);
         
         Metronome tic(.01);
-        while(bot.step(C, -1.))
+        while(bot.get()->step(c, -1.))
         {
             tic.waitForTic();
         }
@@ -160,12 +161,9 @@ void flyingBlockSim() {
   // finger sollten das objekt erkennen und dann von alleine genau soweit schließen, bis kontakt entsteht
   sim.get()->closeGripper("R_gripper", 0.1, 1);
   while(sim.get()->getGripperIsGrasping("R_gripper"));
-  SimWaitForSeconds(1., sim);
   // simu laufen lassen mit do step aus execute zb für 1 s
   komo = GetKomoUp(config);
   ExecuteKomoInSimulation(komo, sim, 0.5);
-
-  SimWaitForSeconds(1., sim);
 
 }
 
@@ -175,19 +173,19 @@ void flyingBlockBotop()
     std::vector<std::string> scenarioPaths;
     scenarioPaths.emplace_back("../rai-robotModels/scenarios/pandasTable.g");
     std::shared_ptr<BotOp> bot = InitBotop(config, scenarioPaths);
-    bot.get->home(C);
+    bot.get()->home(config);
     
     std::shared_ptr<KOMO> komo = GetKomoToBlockTwo(config);
-    ExecuteKomoInBotop(komo, sim, 2.);
-    bot.get->closeGripper();
+    ExecuteKomoInBotop(komo, config, bot, 2.);
+    bot.get()->gripperL->close();
     
-    bot.get->gripperL->close();
-    while(!bot.gripperL->isDone()) rai::wait(.1);
+    bot.get()->gripperL->close();
+    while(!bot.get()->gripperL->isDone()) rai::wait(.1);
     
     komo = GetKomoUp(config);
-    ExecuteKomoInBotop(komo, sim, 0.5);
+    ExecuteKomoInBotop(komo, config, bot, 0.5);
     
-    bot.gripperL->open();
+    bot.get()->gripperL->open();
 
 
 }
