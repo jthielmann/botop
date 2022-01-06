@@ -41,11 +41,13 @@ void ExecuteKomoInBotop(std::shared_ptr<KOMO> komo, rai::Configuration& c, std::
         tic.waitForTic();
     }
     return;
+
 }
 
 std::shared_ptr<KOMO> GetKomoToBlock(const rai::Configuration& config) {
     std::shared_ptr<KOMO> komo = PrepareKomo(config);
     std::string blockName = "obj1";
+    std::string blockName2 = "obj2";
 
     //task objectives:
     komo.get()->addObjective({1.},     FS_insideBox,       {"R_gripperCenter", blockName.c_str()},  OT_ineq, {1e2}, {});
@@ -54,7 +56,9 @@ std::shared_ptr<KOMO> GetKomoToBlock(const rai::Configuration& config) {
     komo.get()->addObjective({1.},     FS_scalarProductXZ, {"R_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.});
     komo.get()->addObjective({0., 1.}, FS_distance,        {"R_finger1",       blockName.c_str()},  OT_ineq, {1e2}, {-.01});
     komo.get()->addObjective({0., 1.}, FS_distance,        {"R_finger2",       blockName.c_str()},  OT_ineq, {1e2}, {-.01});
-    komo.get()->addObjective({1.},     FS_qItself,         {},                           OT_eq,   {1e2}, {},     1);
+    komo.get()->addObjective({0., 1.}, FS_distance,        {"R_finger1",       blockName2.c_str()}, OT_ineq, {1e2}, {-.01});
+    komo.get()->addObjective({0., 1.}, FS_distance,        {"R_finger2",       blockName2.c_str()}, OT_ineq, {1e2}, {-.01});
+    komo.get()->addObjective({1.},     FS_qItself,         {},                                      OT_eq,   {1e2}, {},     1);
     komo.get()->addObjective({1.},     FS_positionRel,     {"R_gripperCenter", blockName.c_str()},  OT_sos, {{1,3},{0,1e2,0}});
 
     komo.get()->optimize();
