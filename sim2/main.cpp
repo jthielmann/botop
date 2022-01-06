@@ -117,16 +117,16 @@ std::shared_ptr<KOMO> GetKomoToBlockTwo(const rai::Configuration& config) {
     std::string blockName2 = "obj2";
 
     //task objectives:
-    komo.get()->addObjective({1.},     FS_insideBox,       {"R_gripperCenter", blockName.c_str()},  OT_ineq, {1e2}, {});
-    komo.get()->addObjective({1.},     FS_scalarProductXX, {"R_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.});
-    komo.get()->addObjective({1.},     FS_scalarProductZZ, {"R_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.});
-    komo.get()->addObjective({1.},     FS_scalarProductXZ, {"R_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.});
-    komo.get()->addObjective({0., 1.}, FS_distance,        {"R_finger1",       blockName.c_str()},  OT_ineq, {1e2}, {-.01});
-    komo.get()->addObjective({0., 1.}, FS_distance,        {"R_finger2",       blockName.c_str()},  OT_ineq, {1e2}, {-.01});
-    komo.get()->addObjective({0., 1.}, FS_distance,        {"R_finger1",       blockName2.c_str()}, OT_ineq, {1e2}, {-.01});
-    komo.get()->addObjective({0., 1.}, FS_distance,        {"R_finger2",       blockName2.c_str()}, OT_ineq, {1e2}, {-.01});
+    komo.get()->addObjective({1.},     FS_insideBox,       {"L_gripperCenter", blockName.c_str()},  OT_ineq, {1e2}, {});
+    komo.get()->addObjective({1.},     FS_scalarProductXX, {"L_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.});
+    komo.get()->addObjective({1.},     FS_scalarProductZZ, {"L_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.});
+    komo.get()->addObjective({1.},     FS_scalarProductXZ, {"L_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.});
+    komo.get()->addObjective({0., 1.}, FS_distance,        {"L_finger1",       blockName.c_str()},  OT_ineq, {1e2}, {-.01});
+    komo.get()->addObjective({0., 1.}, FS_distance,        {"L_finger2",       blockName.c_str()},  OT_ineq, {1e2}, {-.01});
+    komo.get()->addObjective({0., 1.}, FS_distance,        {"L_finger1",       blockName2.c_str()}, OT_ineq, {1e2}, {-.01});
+    komo.get()->addObjective({0., 1.}, FS_distance,        {"L_finger2",       blockName2.c_str()}, OT_ineq, {1e2}, {-.01});
     komo.get()->addObjective({1.},     FS_qItself,         {},                           OT_eq,   {1e2}, {},     1);
-    komo.get()->addObjective({1.},     FS_positionRel,     {"R_gripperCenter", blockName.c_str()},  OT_sos, {{1,3},{0,1e2,0}});
+    komo.get()->addObjective({1.},     FS_positionRel,     {"L_gripperCenter", blockName.c_str()},  OT_sos, {{1,3},{0,1e2,0}});
 
     komo.get()->optimize();
     return komo;
@@ -139,10 +139,10 @@ std::shared_ptr<KOMO> GetKomoUp(const rai::Configuration& config, double height 
     //task objectives:
     arr basePos = config[blockName.c_str()]->getPosition();
     basePos(2) += height;
-    komo.get()->addObjective({1.}, FS_position, {"R_gripperCenter"}, OT_eq, {1e2}, basePos);
-    komo.get()->addObjective({0., 1.}, FS_scalarProductXX, {"R_gripperCenter", "world"}, OT_eq,   {1e2}, {0.}, 1);
-    komo.get()->addObjective({0., 1.}, FS_scalarProductYY, {"R_gripperCenter", "world"}, OT_eq,   {1e2}, {0.}, 1);
-    komo.get()->addObjective({0., 1.}, FS_scalarProductZZ, {"R_gripperCenter", "world"}, OT_eq,   {1e2}, {0.}, 1);
+    komo.get()->addObjective({1.}, FS_position, {"L_gripperCenter"}, OT_eq, {1e2}, basePos);
+    komo.get()->addObjective({0., 1.}, FS_scalarProductXX, {"L_gripperCenter", "world"}, OT_eq,   {1e2}, {0.}, 1);
+    komo.get()->addObjective({0., 1.}, FS_scalarProductYY, {"L_gripperCenter", "world"}, OT_eq,   {1e2}, {0.}, 1);
+    komo.get()->addObjective({0., 1.}, FS_scalarProductZZ, {"L_gripperCenter", "world"}, OT_eq,   {1e2}, {0.}, 1);
 
     komo.get()->optimize();
     return komo;
