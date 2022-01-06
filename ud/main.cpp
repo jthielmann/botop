@@ -32,9 +32,9 @@ std::shared_ptr<KOMO> PrepareKomo(const rai::Configuration& c, uint stepsPerPhas
     return komo;
 }
 
-void ExecuteKomoInBotop(std::shared_ptr<KOMO> komo, rai::Configuration& c, std::shared_ptr<BotOp> bot, double duration = 4) {
+void ExecuteKomoInBotop(std::shared_ptr<KOMO> komo, rai::Configuration& c, std::shared_ptr<BotOp> bot, double duration = 10) {
     arr path = komo.get()->getPath_qOrg();
-    bot.get()->move(path, ARR(10.));
+    bot.get()->move(path, ARR(duration));
     Metronome tic(.01);
     while(bot.get()->step(c, -1.))
     {
@@ -73,6 +73,7 @@ std::shared_ptr<KOMO> GetKomoUp(const rai::Configuration& config, double height 
     komo.get()->addObjective({0., 1.}, FS_scalarProductXX, {"l_gripperCenter", "world"}, OT_eq,   {1e2}, {0.}, 1);
     komo.get()->addObjective({0., 1.}, FS_scalarProductYY, {"l_gripperCenter", "world"}, OT_eq,   {1e2}, {0.}, 1);
     komo.get()->addObjective({0., 1.}, FS_scalarProductZZ, {"l_gripperCenter", "world"}, OT_eq,   {1e2}, {0.}, 1);
+    komo.get()->addObjective({1.},     FS_qItself,         {},                           OT_eq,   {1e2}, {},   1);
 
     komo.get()->optimize();
     return komo;
@@ -84,16 +85,20 @@ void simpleUp()
     std::vector<std::string> scenarioPaths;
     scenarioPaths.emplace_back("pandasTableLocal.g");
     std::shared_ptr<BotOp> bot = InitBotop(config, scenarioPaths);
+
+    // bot.get()->gripperL->close();
+//    while(!bot.get()->gripperL->isDone()) rai::wait(.1);
+    bot.get()->gripperL->open();
+    while(!bot.get()->gripperL->isDone()) rai::wait(.1);
+
     bot.get()->home(config);
 
     std::shared_ptr<KOMO> komo = GetKomoToBlock(config);
     ExecuteKomoInBotop(komo, config, bot, 10.);
-    
-    rai::wait(100.);
 
     bot.get()->gripperL->close();
     while(!bot.get()->gripperL->isDone()) rai::wait(.1);
-    
+
     komo = GetKomoUp(config);
     ExecuteKomoInBotop(komo, config, bot, 2.);
     

@@ -20,7 +20,11 @@ BotOp::BotOp(rai::Configuration& C, bool useRealRobot){
   if(useRealRobot){
     if(useArm=="left"){
       robotL = make_unique<FrankaThreadNew>(0, franka_getJointIndices(C,'l'), cmd, state);
-      if(useGripper) gripperL = make_unique<FrankaGripper>(0);
+      if(useGripper){
+          auto gripp  = make_unique<FrankaGripper>(0);
+          gripp->homing();
+          gripperL = gripp;
+      }
     }else if(useArm=="right"){
       robotR = make_unique<FrankaThreadNew>(1, franka_getJointIndices(C,'r'), cmd, state);
       if(useGripper) gripperR = make_unique<FrankaGripper>(1);
