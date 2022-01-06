@@ -350,6 +350,7 @@ beschreibungstools
 3) Scenarios - gut mit einer beschreibungsmethode, schlecht mit einer anderen
 4) conclusion
 
+kein funneling, da zu aufwaendig
 
 
 VON SIM ZU REAL:

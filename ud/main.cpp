@@ -48,14 +48,15 @@ std::shared_ptr<KOMO> GetKomoToBlock(const rai::Configuration& config) {
     std::string blockName = "obj1";
 
     //task objectives:
-    komo.get()->addObjective({1.},     FS_insideBox,       {"R_gripperCenter", blockName.c_str()},  OT_ineq, {1e2}, {});
-    komo.get()->addObjective({1.},     FS_scalarProductXX, {"R_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.});
-    komo.get()->addObjective({1.},     FS_scalarProductZZ, {"R_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.});
-    komo.get()->addObjective({1.},     FS_scalarProductXZ, {"R_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.});
-    komo.get()->addObjective({0., 1.}, FS_distance,        {"R_finger1",       blockName.c_str()},  OT_ineq, {1e2}, {-.01});
-    komo.get()->addObjective({0., 1.}, FS_distance,        {"R_finger2",       blockName.c_str()},  OT_ineq, {1e2}, {-.01});
+    komo.get()->addObjective({1.},     FS_insideBox,       {"l_gripperCenter", blockName.c_str()},  OT_ineq, {1e2}, {});
+    komo.get()->addObjective({1.},     FS_scalarProductXX, {"l_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.});
+    komo.get()->addObjective({1.},     FS_scalarProductZZ, {"l_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.7});
+    //komo.get()->addObjective({1.},     FS_scalarProductXZ, {"l_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.});
+    komo.get()->addObjective({1.},     FS_scalarProductYY, {"l_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.});
+    komo.get()->addObjective({0., 1.}, FS_distance,        {"l_finger1",       blockName.c_str()},  OT_ineq, {1e2}, {-.01});
+    komo.get()->addObjective({0., 1.}, FS_distance,        {"l_finger2",       blockName.c_str()},  OT_ineq, {1e2}, {-.01});
     komo.get()->addObjective({1.},     FS_qItself,         {},                           OT_eq,   {1e2}, {},     1);
-    komo.get()->addObjective({1.},     FS_positionRel,     {"R_gripperCenter", blockName.c_str()},  OT_sos, {{1,3},{0,1e2,0}});
+    komo.get()->addObjective({1.},     FS_positionRel,     {"l_gripperCenter", blockName.c_str()},  OT_sos, {{1,3},{0,1e2,0}});
 
     komo.get()->optimize();
     return komo;
@@ -68,36 +69,13 @@ std::shared_ptr<KOMO> GetKomoUp(const rai::Configuration& config, double height 
     //task objectives:
     arr basePos = config[blockName.c_str()]->getPosition();
     basePos(2) += height;
-    komo.get()->addObjective({1.},     FS_position,        {"R_gripperCenter"},          OT_eq,   {1e2}, basePos);
-    komo.get()->addObjective({0., 1.}, FS_scalarProductXX, {"R_gripperCenter", "world"}, OT_eq,   {1e2}, {0.}, 1);
-    komo.get()->addObjective({0., 1.}, FS_scalarProductYY, {"R_gripperCenter", "world"}, OT_eq,   {1e2}, {0.}, 1);
-    komo.get()->addObjective({0., 1.}, FS_scalarProductZZ, {"R_gripperCenter", "world"}, OT_eq,   {1e2}, {0.}, 1);
+    komo.get()->addObjective({1.},     FS_position,        {"l_gripperCenter"},          OT_eq,   {1e2}, basePos);
+    komo.get()->addObjective({0., 1.}, FS_scalarProductXX, {"l_gripperCenter", "world"}, OT_eq,   {1e2}, {0.}, 1);
+    komo.get()->addObjective({0., 1.}, FS_scalarProductYY, {"l_gripperCenter", "world"}, OT_eq,   {1e2}, {0.}, 1);
+    komo.get()->addObjective({0., 1.}, FS_scalarProductZZ, {"l_gripperCenter", "world"}, OT_eq,   {1e2}, {0.}, 1);
 
     komo.get()->optimize();
     return komo;
-}
-
-void flyingBlockBotop()
-{
-    rai::Configuration config;
-    std::vector<std::string> scenarioPaths;
-    scenarioPaths.emplace_back("../rai-robotModels/scenarios/pandasTable.g");
-    std::shared_ptr<BotOp> bot = InitBotop(config, scenarioPaths);
-    bot.get()->home(config);
-    
-    std::shared_ptr<KOMO> komo = GetKomoToBlock(config);
-    ExecuteKomoInBotop(komo, config, bot, 2.);
-    bot.get()->gripperL->close();
-    
-    bot.get()->gripperL->close();
-    while(!bot.get()->gripperL->isDone()) rai::wait(.1);
-    
-    komo = GetKomoUp(config);
-    ExecuteKomoInBotop(komo, config, bot, 0.5);
-    
-    bot.get()->gripperL->open();
-
-
 }
 
 void simpleUp()
@@ -107,10 +85,12 @@ void simpleUp()
     scenarioPaths.emplace_back("pandasTableLocal.g");
     std::shared_ptr<BotOp> bot = InitBotop(config, scenarioPaths);
     bot.get()->home(config);
-    
+
     std::shared_ptr<KOMO> komo = GetKomoToBlock(config);
-    ExecuteKomoInBotop(komo, config, bot, 2.);
+    ExecuteKomoInBotop(komo, config, bot, 10.);
     
+    rai::wait(100.);
+
     bot.get()->gripperL->close();
     while(!bot.get()->gripperL->isDone()) rai::wait(.1);
     
