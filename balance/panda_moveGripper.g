@@ -19,7 +19,7 @@ Delete panda_link7_0
 
 (panda_joint2)	{ shape:capsule color:[.9 .9 .9 .1] size:[.12 .08] Q:<d(90 0 1 0) t(0 0 .0)>, noVisual, contact:-2  }
 (panda_joint4)	{ shape:capsule color:[.9 .9 .9 .1] size:[.12 .08] Q:<d(90 0 1 0) t(0 0 .0)>, noVisual, contact:-2  }
-panda_coll6(panda_joint6)	{ shape:capsule color:[.9 .9 .9 .1] size:[.1 .07] Q:<d(90 0 1 0) t(0 .0 -.04)>, noVisual, contact:-2  }
+frame(panda_joint6)	{ shape:capsule color:[.9 .9 .9 .1] size:[.1 .07] Q:<d(90 0 1 0) t(0 .0 -.04)>, noVisual, contact:-2  }
 panda_coll7(panda_joint7)	{ shape:capsule color:[.9 .9 .9 .1] size:[.1 .07] Q:<d(90 0 1 0) t(0 .0 .01)>, noVisual, contact:-2  }
 
 ## zero position

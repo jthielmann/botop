@@ -11,8 +11,6 @@ table (world){
 Prefix: "L_"
 './panda_moveGripper.g'
 
-Prefix!
-
 Prefix: "R_"
 './panda_moveGripper.g'
 
