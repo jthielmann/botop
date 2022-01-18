@@ -22,3 +22,5 @@ std::shared_ptr<KOMO> GetKomoToBlock(const rai::Configuration& config);
 std::shared_ptr<KOMO> GetKomoUp(const rai::Configuration& config, double height = 0.3);
 
 void simpleUp();
+
+std::shared_ptr<KOMO> GetKomoToStick(const rai::Configuration& config);

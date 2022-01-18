@@ -14,11 +14,12 @@ obj1(table) {
           contact:1
           }
 
+
 ball(table) {
                 Q:[-.1 -.3 .075], #(in cm),
                 joint:rigid,
                 mass:0.2,
-          shape:box, size:[.07,.07,.07, 0.], color:[.3 .3 .9],
+          shape:ssBox, size:[.07,.07,.07, 0.], color:[.3 .3 .9],
           contact:1
           }
 
@@ -27,7 +28,7 @@ ball(table) {
 Prefix: "l_"
 Include: '../scenarios/panda_moveGripper.g'
 Prefix!
-        
+
 Edit l_panda_link0 (table)  { Q:<t( .4 -.4 .05) d(90 0 0 1)> }
 
 camera(world){
@@ -35,6 +36,8 @@ camera(world){
     shape:marker, size:[.1],
     focalLength:0.895, width:640, height:360, zRange:[.5 100]
 }
-ref (obj1) {shape:marker size:[.2] Q:<t(.07 0 0) d (90 0 1 0)>}
+ref (obj1) {shape:marker size:[.2] Q:<t(.07 0 0) d (0 0 1 0)>}
+ref2 (ball) {shape:marker size:[.2] Q:<t(.07 0 0) d (0 0 1 0)>}
 Edit l_finger1{ joint:rigid }
 Edit l_finger2{ joint:rigid }
+

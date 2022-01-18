@@ -8,16 +8,16 @@ table (world){
     friction:.1
 }
 
-Prefix: "L_"
+Prefix: "l_"
 './panda_moveGripper.g'
 
-Prefix: "R_"
+Prefix: "r_"
 './panda_moveGripper.g'
 
 Prefix!
         
-Edit L_panda_link0 (table) { Q:<t(-.4 -.4 .1) d(90 0 0 1)> }
-Edit R_panda_link0 (table)  { Q:<t( .4 -.4 .1) d(90 0 0 1)> }
+Edit l_panda_link0 (table) { Q:<t(-.4 -.4 .1) d(90 0 0 1)> }
+Edit l_panda_link0 (table)  { Q:<t( .4 -.4 .1) d(90 0 0 1)> }
 
 ### camera
 

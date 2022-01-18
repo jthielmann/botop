@@ -1,0 +1,32 @@
+
+
+obj2(l_gripperCenter) {
+          Q:<t(0 0 0) d(90 0 0 1) d(45 0 1 0) t(0.2 0 -0.03)>, #(in cm),
+          joint:rigid,
+          mass:0.2,
+          shape:ssBox, size:[.5,.05,.07, 0.], color:[.3 .3 .9],
+          contact:-2
+          }
+
+obj3(ball) {
+          Q:<d(90 0 1 0) t(-0.3 0 0)>, #(in cm),
+          joint:rigid,
+          mass:0.2,
+          shape:ssBox, size:[.5,.05,.07, 0.], color:[.3 .3 .9],
+          contact:-2
+          }
+
+
+ref3 (obj3) {shape:marker size:[.2] Q:<t(.07 0 0) d (0 0 1 0)>}
+
+obj4(obj3) {
+          Q:<t(-0.3 0 0) d(45 0 1 0)>, #(in cm),
+          joint:rigid,
+          mass:0.2,
+          shape:ssBox, size:[.5,.05,.07, 0.], color:[.1 .1 .1],
+          contact:-2
+          }
+
+
+ref4 (obj4) {shape:marker size:[.3], Q:<d(-90 0 1 0) d(90 0 0 1)>}
+

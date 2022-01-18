@@ -51,6 +51,24 @@ std::shared_ptr<KOMO> GetKomoToBlock(const rai::Configuration& config) {
     komo.get()->addObjective({1.},     FS_insideBox,       {"l_gripperCenter", blockName.c_str()},  OT_ineq, {1e2}, {});
     komo.get()->addObjective({1.},     FS_scalarProductXX, {"l_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.});
     komo.get()->addObjective({1.},     FS_scalarProductZZ, {"l_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.7});
+    komo.get()->addObjective({1.},     FS_scalarProductYY, {"l_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.});
+    komo.get()->addObjective({0., 1.}, FS_distance,        {"l_finger1",       blockName.c_str()},  OT_ineq, {1e2}, {-.01});
+    komo.get()->addObjective({0., 1.}, FS_distance,        {"l_finger2",       blockName.c_str()},  OT_ineq, {1e2}, {-.01});
+    komo.get()->addObjective({1.},     FS_qItself,         {},                           OT_eq,   {1e2}, {},     1);
+    komo.get()->addObjective({1.},     FS_positionRel,     {"l_gripperCenter", blockName.c_str()},  OT_sos, {{1,3},{0,1e2,0}});
+
+    komo.get()->optimize();
+    return komo;
+}
+
+std::shared_ptr<KOMO> GetKomoToStick(const rai::Configuration& config) {
+    std::shared_ptr<KOMO> komo = PrepareKomo(config);
+    std::string blockName = "obj1";
+
+    //task objectives:
+    komo.get()->addObjective({1.},     FS_insideBox,       {"l_gripperCenter", blockName.c_str()},  OT_ineq, {1e2}, {});
+    komo.get()->addObjective({1.},     FS_scalarProductXX, {"l_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.});
+    komo.get()->addObjective({1.},     FS_scalarProductZZ, {"l_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.});
     //komo.get()->addObjective({1.},     FS_scalarProductXZ, {"l_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.});
     komo.get()->addObjective({1.},     FS_scalarProductYY, {"l_gripperCenter", blockName.c_str()},  OT_eq,   {1e2}, {0.});
     komo.get()->addObjective({0., 1.}, FS_distance,        {"l_finger1",       blockName.c_str()},  OT_ineq, {1e2}, {-.01});
