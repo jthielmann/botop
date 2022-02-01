@@ -41,3 +41,6 @@ ref2 (ball) {shape:marker size:[.2] Q:<t(.07 0 0) d (0 0 1 0)>}
 Edit l_finger1{ joint:rigid }
 Edit l_finger2{ joint:rigid }
 
+
+stickTop (l_gripperCenter) {shape:marker size:[.2] Q:<d(45 1 0 0) t(0 0 -0.5)>}
+

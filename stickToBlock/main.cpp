@@ -24,8 +24,8 @@ std::shared_ptr<KOMO> GetKomoToBall(const rai::Configuration& config) {
   komo.get()->addObjective({1.}, FS_scalarProductZZ, {object.c_str(), "l_gripperCenter"}, OT_eq,   {1e2}, {.7});
   //komo.get()->addObjective({1.}, FS_scalarProductZZ, {"l_gripperCenter", object.c_str()}, OT_eq,   {1e2}, {0.});
   //komo.get()->addObjective({1.}, FS_scalarProductXY, {"l_gripperCenter", object.c_str()}, OT_eq,   {1e2}, {1.});
-  komo.get()->addObjective({1.}, FS_scalarProductXY, {"l_gripperCenter", object.c_str()}, OT_eq,   {1e2}, {-1.});
-
+  komo.get()->addObjective({1.},     FS_scalarProductXY, {"l_gripperCenter", object.c_str()}, OT_eq,   {1e2}, {-1.});
+  komo.get()->addObjective({0., 1.}, FS_distance,        {"stickTop", "table"},               OT_ineq, {1e2}, {0.01});
 
 
   komo.get()->optimize();
@@ -48,7 +48,6 @@ void stickAndBlockBotop() {
     std::shared_ptr<BotOp> bot = InitBotop(config, scenarioPaths);
     bot.get()->home(config);
     std::shared_ptr<KOMO> komo;
-    rai::wait();
     komo = GetKomoToBlock(config);
     ExecuteKomoInBotop(komo, config, bot, 5.);
 
