@@ -7,10 +7,10 @@ table (world){
 }
 
 obj1(table) {
-	  Q:[0 0 .075], #(in cm),
+          Q:[-0.05 -0.10 .065], #(in cm),
 	  joint:rigid,
 	  mass:0.2,
-          shape:ssBox, size:[.5,.05,.07, 0.], color:[.3 .3 .9],
+          shape:ssBox, size:[.5,.03,.03, 0.01], color:[.3 .3 .9],
           contact:1
           }
 
@@ -38,6 +38,8 @@ camera(world){
 }
 ref (obj1) {shape:marker size:[.2] Q:<t(.07 0 0) d (0 0 1 0)>}
 ref2 (ball) {shape:marker size:[.2] Q:<t(.07 0 0) d (0 0 1 0)>}
+refTable(ball) {shape:marker size:[.2] Q:<t(-.3 0 -.15)>}
+
 Edit l_finger1{ joint:rigid }
 Edit l_finger2{ joint:rigid }
 

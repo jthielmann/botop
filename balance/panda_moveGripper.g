@@ -19,7 +19,7 @@ Delete panda_link7_0
 
 (panda_joint2)	{ shape:capsule color:[.9 .9 .9 .1] size:[.12 .08] Q:<d(90 0 1 0) t(0 0 .0)>, noVisual, contact:-2  }
 (panda_joint4)	{ shape:capsule color:[.9 .9 .9 .1] size:[.12 .08] Q:<d(90 0 1 0) t(0 0 .0)>, noVisual, contact:-2  }
-(panda_joint6)	{ shape:capsule color:[.9 .9 .9 .1] size:[.1 .07] Q:<d(90 0 1 0) t(0 .0 -.04)>, noVisual, contact:1  }
+(panda_joint6)	{ shape:capsule color:[.9 .9 .9 .1] size:[.1 .07] Q:<d(90 0 1 0) t(0 .0 -.04)>, noVisual, contact:-2  }
 panda_coll7(panda_joint7)	{ shape:capsule color:[.9 .9 .9 .1] size:[.1 .07] Q:<d(90 0 1 0) t(0 .0 .01)>, noVisual, contact:-2  }
 
 ## zero position
@@ -48,9 +48,3 @@ Delete panda_rightfinger_1
 Delete panda_rightfinger_0
 
 Include: 'gripper.g'
-
-Edit gripper (panda_joint7){ Q:<d(-90 0 1 0) d(135 0 0 1) t(0 0 -.155)> }
-       
-Edit finger1{ joint:transX Q:<> A:<t(+.07 0 -.05)> limits: [-.05 0.02], contact: -2, shape:capsule, size:[.02, .02] }
-Edit finger2{ joint:transX mimic:(finger1) Q:<> A:<d(180 0 0 1) t(+.07 0 -.05)>, limits: [-.05 0.02] contact: -2, shape:capsule, size:[.02, .02]}
-        
