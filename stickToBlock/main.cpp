@@ -25,7 +25,10 @@ std::shared_ptr<KOMO> GetKomoToBall(const rai::Configuration& config) {
   //komo.get()->addObjective({1.}, FS_scalarProductZZ, {"l_gripperCenter", object.c_str()}, OT_eq,   {1e2}, {0.});
   //komo.get()->addObjective({1.}, FS_scalarProductXY, {"l_gripperCenter", object.c_str()}, OT_eq,   {1e2}, {1.});
   komo.get()->addObjective({1.},     FS_scalarProductXY, {"l_gripperCenter", object.c_str()}, OT_eq,   {1e2}, {-1.});
-  komo.get()->addObjective({0., 1.}, FS_distance,        {"stickTop", "table"},               OT_ineq, {1e2}, {0.01});
+  komo.get()->addObjective({0., .9}, FS_distance,       {"stickTop", "table"},               OT_ineq, {1e2}, {0.05});
+  komo.get()->addObjective({1.}, FS_distance,       {"stickTop", object.c_str()},               OT_eq, {}, {10});
+  
+  //komo.get()->addObjective({1.},     FS_positionRel,     {"stickTop", object.c_str()},  OT_sos, {{1,3},{0,0,2}});
 
 
   komo.get()->optimize();
